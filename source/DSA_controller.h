@@ -61,6 +61,8 @@ class DSA_controller : public CCI_Controller, public CLoopFunctions {
         /* public helper functions */
         bool       IsHoldingFood();
         CVector2   GetPosition();
+        CVector2   GetPreviousPosition();
+        void       SetPreviousPosition(CVector3 pos);
         CVector3   GetStartPosition();
         CRadians   GetHeading();
 
@@ -112,6 +114,7 @@ class DSA_controller : public CCI_Controller, public CLoopFunctions {
         bool                 isHoldingFood;
         bool                 goingHome;
         CRange<CRadians>     AngleToleranceInRadians;
+	CVector2             previous_position;
         CRange<CRadians>     Tolerance;
         size_t               stopTimeStep;
         size_t               collisionDelay;

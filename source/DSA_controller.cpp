@@ -212,15 +212,24 @@ void DSA_controller::CopyPatterntoTemp()
  * Primary control loop for this controller object. This function will execute
  * the CPFA logic using the CPFA enumeration flag once per frame.
  *****/
-void DSA_controller::ControlStep() {
+void DSA_controller::ControlStep() 
+{
+  CVector3 position3d(GetPosition().GetX(), GetPosition().GetY(), 0.02);
+  CVector2 prev_pos = GetPreviousPosition();
+  CVector3 previous_position3d(prev_pos.GetX(), prev_pos.GetY(), 0.02);
+  SetPreviousPositionj(position3d);
+  CRay3 trail_ray(previous_position3d, position3d);
+  loopFunctions.TargetRayList.push_back(trail_ray);
+
 	if(IsHoldingFood() == false && DSA == SEARCHING) {
 	    /* draws target rays every 2 seconds */
 	    if((loopFunctions.SimTime % (loopFunctions.TicksPerSecond)) == 0) {
-	        CVector3 position3d(GetPosition().GetX(), GetPosition().GetY(), 0.02);
-        	CVector3 target3d(GetTarget().GetX(), GetTarget().GetY(), 0.02);
-        	CRay3 targetRay(target3d, position3d);
-        	myTrail.push_back(targetRay);
-        	loopFunctions.TargetRayList.push_back(targetRay);
+	      //CVector3 position3d(GetPosition().GetX(), GetPosition().GetY(), 0.02);
+        	//CVector3 target3d(GetTarget().GetX(), GetTarget().GetY(), 0.02);
+        	//CRay3 targetRay(target3d, position3d);
+		
+        	//myTrail.push_back(targetRay);
+        	//loopFunctions.TargetRayList.push_back(targetRay);
 	        //loopFunctions.TargetRayList.insert(loopFunctions.TargetRayList.end(), myTrail.begin(), myTrail.end());
 	    }
 	}
@@ -588,6 +597,16 @@ CVector2 DSA_controller::GetPosition() {
     CVector3 position3D = compass->GetReading().Position;
     /* Return the 2D position components of the compass sensor reading. */
     return CVector2(position3D.GetX(), position3D.GetY());
+}
+
+CVector2 DSA_controller::GetPreviousPosition() 
+{
+        return CVector2(previous_position3D.GetX(), previous_position3D.GetY());
+}
+
+void DSA_controller::SetPreviousPosition(CVector2 pos) 
+{
+  previous_position = pos;
 }
 
 CVector3 DSA_controller::GetStartPosition() 

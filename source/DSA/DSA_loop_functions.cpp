@@ -12,7 +12,7 @@ DSA_loop_functions::DSA_loop_functions() :
     DrawDensityRate(4),
 //    DrawIDs(1),
     DrawIDs(0),
-    DrawTrails(1),
+    DrawTrails(0),
     DrawTargetRays(0),
     FoodDistribution(2),
 //    FoodDistribution(9),

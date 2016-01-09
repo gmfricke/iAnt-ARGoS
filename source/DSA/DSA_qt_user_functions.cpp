@@ -51,7 +51,7 @@ void DSA_qt_user_functions::DrawOnRobot(CFootBotEntity& entity) {
 void DSA_qt_user_functions::DrawOnArena(CFloorEntity& entity) {
     DrawFood();
     DrawNest();
-    DrawTargetRays();
+    //DrawTargetRays();
 }
 
 /*****

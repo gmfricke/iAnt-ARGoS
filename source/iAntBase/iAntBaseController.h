@@ -46,6 +46,7 @@ class iAntBaseController : public argos::CCI_Controller {
 
         size_t WaitTime;
 
+	argos::CRadians TargetAngleTolerance;
         argos::Real TargetDistanceTolerance;
         argos::Real SearchStepSize;
 

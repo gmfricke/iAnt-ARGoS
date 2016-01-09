@@ -1,4 +1,7 @@
 #include "iAntBaseController.h"
+#include <iostream>
+
+using namespace std;
 
 /**
  * Constructor for the iAntBaseController. Several important variables are defined here.
@@ -8,7 +11,8 @@
 iAntBaseController::iAntBaseController() :
     LF(argos::CSimulator::GetInstance().GetLoopFunctions()),
     WaitTime(0),
-    TargetDistanceTolerance(0.03),
+    TargetDistanceTolerance(0.02),
+    TargetAngleTolerance(0.05),
     SearchStepSize(0.08),
     RobotForwardSpeed(16.0),
     RobotRotationSpeed(16.0),
@@ -81,15 +85,30 @@ void iAntBaseController::SetNextMovement() {
         argos::Real distanceToTarget = (TargetPosition - GetPosition()).Length();
         argos::CRadians headingToTarget = (TargetPosition - GetPosition()).Angle();
         argos::CRadians headingToTargetError = (GetHeading() - headingToTarget).SignedNormalize();
-        argos::CRadians zero(0.0);
 
-        if(distanceToTarget > TargetDistanceTolerance) {
-            PushMovement(FORWARD, distanceToTarget);
-            if(headingToTargetError < zero) {
-                PushMovement(LEFT, -ToDegrees(headingToTargetError).GetValue());
-            } else {
-                PushMovement(RIGHT, ToDegrees(headingToTargetError).GetValue());
-            }
+	//cout << "headingToTarget: " << headingToTarget << endl;
+	//cout << "headingToTargetError: " << headingToTargetError << endl;
+
+	//cout << "TargetAngleTolerance: " << TargetAngleTolerance << endl;
+	//cout << "TargetDistanceTolerance: " << TargetDistanceTolerance << endl;
+
+
+        if(!IsAtTarget()) {
+	  if(headingToTargetError > TargetAngleTolerance) 
+	    {
+	      //cout << "Turn Left " << endl;
+	      PushMovement(LEFT, -ToDegrees(headingToTargetError).GetValue());
+            } 
+	  else if(headingToTargetError < -TargetAngleTolerance) 
+	    {
+	      //cout << "Turn Right " << endl;
+	      PushMovement(RIGHT, ToDegrees(headingToTargetError).GetValue());
+	    }
+	  else
+	    {
+	      //cout << "Move Forward " << endl;
+	      PushMovement(FORWARD, distanceToTarget);
+	    }
         } else {
             PushMovement(STOP, 0.0);
         }
@@ -212,7 +231,7 @@ bool iAntBaseController::CollisionDetection() {
        && collisionVector.Length() > 0.0) {
 
         Stop();
-        isCollisionDetected = true;
+       isCollisionDetected = true;
         while(MovementStack.size() > 0) MovementStack.pop();
 
         PushMovement(FORWARD, SearchStepSize);
@@ -255,6 +274,7 @@ void iAntBaseController::Move() {
 
     if(Wait() == true) return;
 
+    
     CollisionDetection();
 
     /* move based on the movement state flag */

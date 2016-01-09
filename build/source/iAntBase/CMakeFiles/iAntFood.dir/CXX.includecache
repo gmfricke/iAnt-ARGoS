@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/matthew/ownCloud/code/GitHub/iAnt-ARGoS/source/iAntBase/iAntFood.cpp
+iAntFood.h
+/Users/matthew/ownCloud/code/GitHub/iAnt-ARGoS/source/iAntBase/iAntFood.h
+
+/Users/matthew/ownCloud/code/GitHub/iAnt-ARGoS/source/iAntBase/iAntFood.h
+

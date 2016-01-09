@@ -79,6 +79,8 @@ class DSA_controller : public iAntBaseController {
         bool TargetHit();
         void SetHoldingFood(); 
 
+	CVector2 previous_position;
+
 };
 
 #endif /* DSA_CONTROLLER_H */

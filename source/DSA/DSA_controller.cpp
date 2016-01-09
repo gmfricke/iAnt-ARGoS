@@ -37,12 +37,14 @@ void DSA_controller::Init(TConfigurationNode& node) {
 
     argos::CVector2 p(GetPosition());
     SetStartPosition(argos::CVector3(p.GetX(), p.GetY(), 0.0));
-    
-    startPosition = CVector3(0.0, 0.0, 0.0);
 
+    startPosition    = CVector3(p.GetX(), p.GetY(), 0.0);
+    //SetTarget(loopFunctions->NestPosition); // So rovers can start from the right position to begin the spiral.
+    
     RNG = CRandom::CreateRNG("argos");
     generatePattern(NumberOfSpirals, NumberOfRobots);
-    TrailColor = CColor(std::rand()%255, std::rand()%255, std::rand()%255, 255);
+    TrailColor = CColor(std::rand()%255, std::rand()%255, std::rand()%255, 120);
+
 }
 
 size_t DSA_controller::generatePattern(int N_circuits, int N_robots)
@@ -95,7 +97,7 @@ size_t DSA_controller::generatePattern(int N_circuits, int N_robots)
 
         }
 
-        paths.push_back(ith_robot_path);
+        // paths.push_back(ith_robot_path);
         ith_robot_path.clear();
     }
 
@@ -184,6 +186,20 @@ void DSA_controller::CopyPatterntoTemp()
  *****/
 void DSA_controller::ControlStep() {
 
+if((SimulationTick() % (SimulationTicksPerSecond()*1)) == 0) 
+{
+          CVector3 position3d(GetPosition().GetX(), GetPosition().GetY(), 0.02);          
+	  CVector3 target3d(previous_position.GetX(), previous_position.GetY(), 0.02);
+          CRay3 targetRay(target3d, position3d);
+          myTrail.push_back(targetRay);
+
+	  loopFunctions->TargetRayList.push_back(targetRay);
+	  loopFunctions->TargetRayColorList.push_back(TrailColor);
+
+            //LOG << myTrail.size() << endl;
+	  previous_position = GetPosition();
+  }
+
     // argos::LOG << DSA << " : " << GetTarget() << std::endl;
 
 	/* Checks if the robot found a food */
@@ -194,13 +210,7 @@ void DSA_controller::ControlStep() {
 
         /* draws target rays every 2 seconds */
         if((SimulationTick() % (SimulationTicksPerSecond() * 1)) == 0) {
-            CVector3 position3d(GetPosition().GetX(), GetPosition().GetY(), 0.02);
-            CVector3 target3d(GetTarget().GetX(), GetTarget().GetY(), 0.02);
-            CRay3 targetRay(target3d, position3d);
-            myTrail.push_back(targetRay);
-            //LOG << myTrail.size() << endl;
-            loopFunctions->TargetRayList.push_back(targetRay);
-            loopFunctions->TargetRayColorList.push_back(TrailColor);
+            
             //loopFunctions->TargetRayList.insert(loopFunctions->TargetRayList.end(), myTrail.begin(), myTrail.end());
         }
 

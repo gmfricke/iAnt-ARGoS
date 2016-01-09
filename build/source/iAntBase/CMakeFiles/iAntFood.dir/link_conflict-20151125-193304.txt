@@ -1,0 +1,1 @@
+/Library/Developer/CommandLineTools/usr/bin/c++   -dynamiclib -Wl,-headerpad_max_install_names  -o libiAntFood.dylib -install_name /Users/matthew/ownCloud/code/GitHub/iAnt-ARGoS/build/source/iAntBase/libiAntFood.dylib CMakeFiles/iAntFood.dir/iAntFood.cpp.o  -L/usr/local/Cellar/argos3/3.0.0-beta39/lib/argos3 

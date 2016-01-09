@@ -66,7 +66,7 @@ void iAnt_controller::Init(TConfigurationNode& node) {
     CVector2 p(GetPosition());
 
     startPosition    = CVector3(p.GetX(), p.GetY(), 0.0);
-    targetPosition   = loopFunctions.NestPosition;
+    targetPosition   = startPosition; //loopFunctions.NestPosition;
     fidelityPosition = loopFunctions.NestPosition;
 }
 
